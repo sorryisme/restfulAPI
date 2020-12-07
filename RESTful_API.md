@@ -386,6 +386,104 @@
 
 
 
+#### 만기 캐싱 헤더는 3xx와 4xx 응답에 선택적으로 사용할 수 있음
+
+- 3xx와 4xx에 대한 캐싱 헤더를 추가하는 것을 고려
+- 네거티브 캐싱은 리다이렉트 횟수와 REST API에 따른 부하를 감소
+
+
+
+## 4.2 미디어 타입
+
+- 데이터 형태를 식별하기 위해 Content-Type 헤더 값을 미디어 타입이라고 함
+- type 값 : application, audio, image, message, model, multipart, text, video
+- type/subtype 다음에 attribute=value 같은 형태로 파라미터로 쓸 수 있음
+  - Content-type: text/html;charset=UTF-8
+
+
+
+### 등록된 미디어 타입
+
+- text/plain : 마크업이 없는 평문 포맷
+- text/html : html로 포맷된 컨텐츠
+- image/jpeg : 표준화한 이미지 압축방식
+- application/xml : xml로 구조화된 컨텐츠
+- aplication/atom + xml : xml 기반의 리스트로 포맷팅한 Atom 사용 컨텐츠
+- application/javascript : 자바스크립트 
+- application/json : 데이터 교환에 사용되는 JSON 포맷
+
+
+
+### 미디어 타입의 설계
+
+
+
+#### 어플리케이션 고유의 미디어타입을 사용
+
+- 응답의 Content-type 헤더 필드는 바디에 JSON 형태로 표현된 플레이어 도큐먼트가 있다는 것을 분명히 나타내야한다
+
+#### 리소스의 표현이 여러가지 가능할 경우 미디어 타입 협상을 지원해야한다
+
+- 클라이언트에서 원하는 미디어 타입을 Accept 헤더에 추가하여 협상할 수 있어야한다
+
+#### query 변수를 사용한 미디어 타입 선택을 지원할 수 있다.
+
+- 쿼리 파라미터에 accept를 통해 미디어 타입을 선택할 수 있다.
+
+
+
+### 표현디자인
+
+#### 5.1 메세지 바디 포맷
+
+- 리소스의 상태를 응답 메세지의 바디를 이용해 전달
+- 텍스트 기반의 포맷을 이용하여 리소스 상태를 표현
+- 현재 가장 많이 사용되는 텍스트 포맷은 XML과 JSON
+  - XML은 꺽쇠 괄호 태그를 이용
+  - JSON은 중괄호를 사용
+
+
+
+#### 규칙 : JSON 리소스 표현을 지원
+
+- 특정 리소스 타입에 대한 표준 포맷이 없을 경우 JSON 포맷 사용
+
+
+
+#### 규칙 : JSON은 문법에 잘 맞아야한다
+
+- 키-값 쌍으로 구성, 순서에 무관한 집합
+
+- 키 값을 문자열로 정의하며 항상 큰 따옴표 안에 넣는다
+
+- 다음 예제는 모든 키 값을 따음표 안에 넣은 JSON
+
+  ```javascript
+  {
+  	"firstName" : "Osvaldo",
+  	"lastName" : "Alonso",
+  	"firstNamePronunciation" : "ahs-VAHL_doe",
+  	"number" : 6, //JSON은 숫자를 지원
+  	"birthDate" : "1985-11-11" //시간과 날짜를 지원하지 않아 문자열로 표현
+  
+  }
+  ```
+
+  - var.fooBar  : 상대적으로 깔끔한 표기법
+  - var["foo-bar"] : 덜 우아한 자바스크립트 표기법
+
+
+
+#### 규칙 : XML과 다른 표현 형식은 선택적으로 지원할 수 있다.
+
+
+
+
+
+
+
+
+
 
 
 
