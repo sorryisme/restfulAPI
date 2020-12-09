@@ -476,6 +476,116 @@
 
 #### 규칙 : XML과 다른 표현 형식은 선택적으로 지원할 수 있다.
 
+- XML과 HTML 등의 리소스를 표현하기 위해 선택적으로 대체 포맷을 사용하여 다른 언어를 지원할 수 있음
+
+
+
+#### 규칙 : 추가 봉투는 없어야한다
+
+- HTTP가 제공한 메세지 봉투를 이용해야 함
+
+
+
+### 5.2 하이퍼미디어 표현
+
+- REST API도 HTML 기반 처럼 하이퍼미디어를 채택하여 표현
+- 일관된 링크 구조를 사용하여 프로그램 적으로 탐색
+
+
+
+#### 규칙 : 링크는 일관성 된 형태로 나타내야한다
+
+- 링크는 리소스 상태표현 안에 필드와 함께 포함되어야한다
+
+- 참고
+
+  ```
+  application/wrml:
+  	format="http://apoi.formats.wrml.rog/application/json",
+  	schema="http://api.schemas.wrml.org/common/Link"
+  ```
+
+  - application/wrml: WRML 미디어 타입을 나타냄 
+  - schema: ... 현재 Link 스키마의 버전 표시
+
+- JSON으로 포맷팅하면 다음같은 폼이 된다
+
+  ```json
+  {
+  	"href" : Text <constrained by URI or URI Template syntax> ,
+      "rel" : Text <constrained by URI syntax> ,
+      "requestTypes" : Array <constrained to contain media type text elements> ,
+      "responeTypes" : Array <constrained top contain media type text elements>,
+      "title" : Text
+  }
+  ```
+
+  - 필수 요소인  href 값은 링크의 타깃 리소스를 나타냄
+    - URI나 URI 템플릿 사용가능
+  - rel 같은 링크 관계를 기술하는 도큐먼트를 나타냄
+  - 연결된 리소스의 허용된 요청 바디 미디어 타입이 나열
+    - 클라이언트는 연결된 리소스에 요청하기전에 확인하는 것이 좋음
+  - responseTypes 값은 사용가능한 응답 바디 미디어 타입이 나열
+    - Accept 헤더에 있는 미디어타입에 우선순위를 매길 때 이 값을 참조
+
+
+
+### 규칙 : 링크관계를 표현할 때에는 일관된 형태를 사용
+
+> 예시
+
+````json
+{
+	"firstName" : "Osvaldo",
+	"lastName" : "Alonso", 
+	"links" : {
+	
+		"self" :{
+			"href" : "http://api.soccer.restapi.org/players/2113",
+			"rel" : "http://api.relations.wrml.org/common/self"
+		},
+		"parent" : {
+			"href" : "http://api.soccer.restapi.org/players",
+			"rel" : "http://api.relations.wrml.org/common/parent"
+		},
+		"team" : {
+			"href" : "http://api.so...중략"
+		}
+	} 
+}
+````
+
+- links 항목은 상위레벨 키-값
+- links 객체의 각 항목은 일관된 링크 구조
+- 클라이언트에서 리소스를 스토어에 추가할 수 있도록 REST API는 링크의 href 값으로 path 기반 변수를 포함한 URI 템플릿을 사용할 수 있음
+
+
+
+### 규칙: 응답 메세지 바디 표현에 셀프 링크를 포함해야한다
+
+- 리소스의 표현을 포함한 응답 메세지 바디는 self 라는 이름의 링크를 포함
+
+
+
+### 규칙 : 진입 API URI 수를 최소화
+
+- API Docroot에서 사람이 읽을 수 있는 형태의 문서를 제공하는 것이 REST API이다
+- 다른 모든 리소스를 프로그램적으로 사용할 수 있게하는 링크를 제공
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
